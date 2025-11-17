@@ -305,11 +305,20 @@ def tts():
 
     
 
+    audio_path = WAVS_DIR + '/' + outname
+    try:
+        #  使用 soundfile 
+        audio_info = sf.info(audio_path)
+        audio_duration = round(audio_info.duration, 2)
+    except Exception as e:
+        print(f"计算音频时长失败: {e}")
+        audio_duration = -1
+
     audio_files.append({
-        "filename": WAVS_DIR + '/' + outname,
+        "filename": audio_path,
         "url": f"http://{request.host}/static/wavs/{outname}",
         "inference_time": round(inter_time,2),
-        "audio_duration": -1
+        "audio_duration": audio_duration
     })
     result_dict={"code": 0, "msg": "ok", "audio_files": audio_files}
     try:
